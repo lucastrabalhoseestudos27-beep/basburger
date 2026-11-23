@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bas Burger – Cardápio</title>
+<style>
+:root{--bg:#fff8f0;--card:#fff;--tx:#2a1a10;--mut:#7a6656;--ac:#d9480f;--ac2:#fff;--bd:#f0e0d0;--hd:#2a1a10;--hdt:#fff3e6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17110d;--card:#241a14;--tx:#f6e9dc;--mut:#b09a87;--ac:#ff7a33;--ac2:#1a0f08;--bd:#3a2b21;--hd:#0f0a07;--hdt:#ffe9d2}}
+:root[data-theme="dark"]{--bg:#17110d;--card:#241a14;--tx:#f6e9dc;--mut:#b09a87;--ac:#ff7a33;--ac2:#1a0f08;--bd:#3a2b21;--hd:#0f0a07;--hdt:#ffe9d2}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 56px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:90px}
+header{background:var(--hd);color:var(--hdt);padding:28px 18px 22px;text-align:center}
+header h1{margin:0;font-size:28px;letter-spacing:.5px}
+header p{margin:6px 0 0;font-size:14px;opacity:.8}
+.badge{display:inline-block;margin-top:12px;padding:5px 12px;border-radius:99px;background:var(--ac);color:var(--ac2);font-size:12px;font-weight:700}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:8px;overflow-x:auto;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--bd)}
+nav a{flex:none;padding:8px 14px;border-radius:99px;border:1px solid var(--bd);background:var(--card);color:var(--tx);text-decoration:none;font-size:14px;font-weight:600}
+main{max-width:640px;margin:0 auto;padding:6px 14px}
+h2{font-size:20px;margin:22px 0 10px}
+.it{display:flex;gap:12px;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px}
+.it h3{margin:0 0 4px;font-size:16px}
+.it p{margin:0 0 8px;font-size:13px;color:var(--mut);line-height:1.35}
+.pr{font-weight:800;color:var(--ac)}
+.ctl{display:flex;align-items:center;gap:10px;flex:none}
+.ctl button{width:34px;height:34px;border-radius:50%;border:0;background:var(--ac);color:var(--ac2);font-size:20px;font-weight:700;cursor:pointer}
+.ctl button.m{background:var(--bd);color:var(--tx)}
+.ctl span{min-width:16px;text-align:center;font-weight:700}
+#bar{position:fixed;left:0;right:0;bottom:0;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--bd);display:none;z-index:6}
+#bar button,.send{width:100%;max-width:640px;margin:0 auto;display:flex;justify-content:space-between;border:0;border-radius:14px;padding:15px 18px;background:var(--ac);color:var(--ac2);font-size:16px;font-weight:800;cursor:pointer}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:10}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:92%;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.sheet h2{margin:0 0 10px}
+.row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;border-bottom:1px dashed var(--bd)}
+.tot{font-weight:800;font-size:17px;margin:12px 0}
+input,select,textarea{width:100%;margin:5px 0;padding:11px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit}
+.close{background:none;border:0;color:var(--mut);width:100%;padding:10px;font-size:14px;cursor:pointer}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
+footer a{color:var(--mut);cursor:pointer;text-decoration:underline}
+.cat{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px;margin:12px 0}
+.ai{border-top:1px dashed var(--bd);padding-top:8px;margin-top:8px}
+.sm{border:0;border-radius:8px;padding:8px 12px;background:var(--bd);color:var(--tx);font-weight:600;cursor:pointer;margin:4px 4px 0 0}
+.sm.r{background:#c92a2a;color:#fff}
+.hint{font-size:12px;color:var(--mut);line-height:1.4}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="nome"></h1>
+  <p>Hambúrgueres artesanais · Peça direto pelo WhatsApp</p>
+  <p id="end"></p><span class="badge" id="aviso"></span>
+</header>
+<nav id="nav"></nav>
+<main id="menu"></main>
+<footer>Preços sujeitos a alteração. Taxa de entrega combinada no WhatsApp.<br><a onclick="openAdm()">Área do administrador</a></footer>
+<div id="bar"><button onclick="openCart()"><span id="qtd"></span><span id="sub"></span></button></div>
+
+<div class="ov" id="modal"><div class="sheet">
+  <h2>Seu pedido</h2>
+  <div id="lista"></div>
+  <div class="tot" id="total"></div>
+  <input id="cli" placeholder="Seu nome">
+  <select id="tipo" onchange="document.getElementById('end').style.display=this.value==='Entrega'?'block':'none'"><option>Entrega</option><option>Retirada</option></select>
+  <input id="end" placeholder="Endereço completo">
+  <select id="pag"><option>Pix</option><option>Cartão</option><option>Dinheiro</option></select>
+  <textarea id="obs" rows="2" placeholder="Observações (ex.: sem cebola)"></textarea>
+  <button class="send" onclick="enviar()"><span>Enviar pedido no WhatsApp</span><span>→</span></button>
+  <button class="close" onclick="closeCart()">Voltar ao cardápio</button>
+</div></div>
+
+<div class="ov" id="adm"><div class="sheet">
+  <div id="login">
+    <h2>Administrador</h2>
+    <input id="pw" type="password" placeholder="Senha" onkeydown="if(event.key==='Enter')login()">
+    <button class="send" onclick="login()"><span>Entrar</span><span>→</span></button>
+    <button class="close" onclick="closeAdm()">Cancelar</button>
+  </div>
+  <div id="editor" style="display:none"></div>
+</div></div>
+
+<script id="cfg" type="application/json">{"nome":"Bas Burger","whats":"5511949294974","aviso":"Abre às 18h","end":"R. Celina, 130 – Vila Suíça, Santo André – SP","hash":"dda3c7211d163e5a9b84c9cdd5191d94725b3579866257eb920e8ba858beebcb","menu":[{"cat":"Hambúrgueres","itens":[{"n":"Clássico","d":"Pão brioche, blend 160g, queijo prato, alface e tomate","p":24},{"n":"Cheddar Bacon","d":"Blend 160g, cheddar cremoso, bacon crocante e molho da casa","p":29},{"n":"Smash Duplo","d":"Dois smashes de 80g, queijo, picles e molho especial","p":32},{"n":"Chicken Crisp","d":"Frango empanado, maionese temperada e alface","p":27},{"n":"Veggie","d":"Burger de grão-de-bico, rúcula e tomate seco","p":26}]},{"cat":"Porções","itens":[{"n":"Batata frita","d":"Porção média crocante","p":18},{"n":"Onion rings","d":"Anéis de cebola empanados","p":20},{"n":"Nuggets (10un)","d":"Acompanha molho barbecue","p":19}]},{"cat":"Bebidas","itens":[{"n":"Refrigerante lata","d":"350ml","p":6},{"n":"Suco natural","d":"Laranja ou limão, 400ml","p":9},{"n":"Milkshake","d":"Chocolate, morango ou baunilha","p":16}]}]}</script>
+<script>
+var CFG=JSON.parse(document.getElementById("cfg").textContent), cart={}, all=[];
+var $=function(i){return document.getElementById(i)};
+var brl=function(v){return Number(v).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})};
+var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")};
+function renderMenu(){
+  cart={};all=[];
+  $("nome").textContent=CFG.nome;$("aviso").textContent=CFG.aviso;$("end").textContent=CFG.end||"";
+  document.title=CFG.nome+" – Cardápio";
+  var nav="",h="";
+  CFG.menu.forEach(function(c,ci){
+    nav+='<a href="#c'+ci+'">'+esc(c.cat)+'</a>';
+    h+='<h2 id="c'+ci+'">'+esc(c.cat)+'</h2>';
+    c.itens.forEach(function(it){
+      var id=all.push(it)-1;
+      h+='<div class="it"><div><h3>'+esc(it.n)+'</h3><p>'+esc(it.d)+'</p><span class="pr">'+brl(it.p)+'</span></div>'+
+      '<div class="ctl"><button class="m" onclick="chg('+id+',-1)" aria-label="Remover">−</button><span id="q'+id+'">0</span><button onclick="chg('+id+',1)" aria-label="Adicionar">+</button></div></div>';
+    });
+  });
+  $("nav").innerHTML=nav;$("menu").innerHTML=h;upd();
+}
+function chg(i,d){cart[i]=Math.max(0,(cart[i]||0)+d);$("q"+i).textContent=cart[i];upd()}
+function totals(){var q=0,t=0;for(var i in cart){q+=cart[i];t+=cart[i]*all[i].p}return{q:q,t:t}}
+function upd(){var s=totals();$("bar").style.display=s.q?"block":"none";$("qtd").textContent="Ver pedido ("+s.q+")";$("sub").textContent=brl(s.t)}
+function openCart(){
+  var h="";
+  for(var i in cart){if(cart[i])h+='<div class="row"><span>'+cart[i]+'x '+esc(all[i].n)+'</span><span>'+brl(cart[i]*all[i].p)+'</span></div>'}
+  $("lista").innerHTML=h;$("total").textContent="Total: "+brl(totals().t);$("modal").style.display="flex";
+}
+function closeCart(){$("modal").style.display="none"}
+function enviar(){
+  var v=function(id){return $(id).value.trim()},tipo=v("tipo");
+  if(!v("cli")){alert("Informe seu nome.");return}
+  if(tipo==="Entrega"&&!v("end")){alert("Informe o endereço.");return}
+  var m="*Novo pedido – "+CFG.nome+"*\n\n";
+  for(var i in cart){if(cart[i])m+=cart[i]+"x "+all[i].n+" – "+brl(cart[i]*all[i].p)+"\n"}
+  m+="\n*Total:* "+brl(totals().t)+"\n*Nome:* "+v("cli")+"\n*"+tipo+"*";
+  if(tipo==="Entrega")m+="\n*Endereço:* "+v("end");
+  m+="\n*Pagamento:* "+v("pag");
+  if(v("obs"))m+="\n*Obs:* "+v("obs");
+  window.open("https://wa.me/"+CFG.whats+"?text="+encodeURIComponent(m),"_blank");
+}
+/* ===== Administrador ===== */
+function sha(s){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")})}
+function openAdm(){$("login").style.display="block";$("editor").style.display="none";$("pw").value="";$("adm").style.display="flex"}
+function closeAdm(){$("adm").style.display="none";renderMenu()}
+function login(){
+  sha($("pw").value).then(function(h){
+    if(h===CFG.hash){$("login").style.display="none";$("editor").style.display="block";admRender()}
+    else alert("Senha incorreta.");
+  }).catch(function(){alert("Não foi possível validar a senha neste navegador.")});
+}
+function admRender(){
+  var h='<h2>Editar cardápio</h2>'+
+  '<input value="'+esc(CFG.nome)+'" placeholder="Nome da loja" oninput="CFG.nome=this.value">'+
+  '<input value="'+esc(CFG.whats)+'" placeholder="WhatsApp (55 + DDD + número)" inputmode="numeric" oninput="CFG.whats=this.value.replace(/\\D/g,\'\')">'+
+  '<input value="'+esc(CFG.aviso)+'" placeholder="Aviso (ex.: Aberto até 23h)" oninput="CFG.aviso=this.value">'+
+  '<input value="'+esc(CFG.end||"")+'" placeholder="Endereço" oninput="CFG.end=this.value">';
+  CFG.menu.forEach(function(c,ci){
+    h+='<div class="cat"><input value="'+esc(c.cat)+'" placeholder="Categoria" oninput="CFG.menu['+ci+'].cat=this.value"><button class="sm r" onclick="delCat('+ci+')">Excluir categoria</button>';
+    c.itens.forEach(function(it,ii){
+      h+='<div class="ai"><input value="'+esc(it.n)+'" placeholder="Nome" oninput="CFG.menu['+ci+'].itens['+ii+'].n=this.value">'+
+      '<input value="'+esc(it.d)+'" placeholder="Descrição" oninput="CFG.menu['+ci+'].itens['+ii+'].d=this.value">'+
+      '<input value="'+String(it.p).replace('.',',')+'" placeholder="Preço" inputmode="decimal" oninput="CFG.menu['+ci+'].itens['+ii+'].p=parseFloat(this.value.replace(\',\',\'.\'))||0">'+
+      '<button class="sm r" onclick="delIt('+ci+','+ii+')">Remover item</button></div>';
+    });
+    h+='<button class="sm" onclick="addIt('+ci+')">+ Item</button></div>';
+  });
+  h+='<button class="sm" onclick="addCat()">+ Categoria</button>'+
+  '<h2 style="margin-top:18px">Nova senha (opcional)</h2><input id="nsenha" type="password" placeholder="Deixe vazio para manter a atual">'+
+  '<p class="hint">Para as mudanças valerem para todos os clientes, baixe o arquivo atualizado e envie para o GitHub, substituindo o index.html. Enquanto isso, elas só aparecem neste aparelho.</p>'+
+  '<button class="send" onclick="baixar()"><span>Baixar index.html atualizado</span><span>↓</span></button>'+
+  '<button class="close" onclick="closeAdm()">Fechar e ver cardápio</button>';
+  $("editor").innerHTML=h;
+}
+function addIt(c){CFG.menu[c].itens.push({n:"Novo item",d:"",p:0});admRender()}
+function delIt(c,i){if(confirm("Remover este item?")){CFG.menu[c].itens.splice(i,1);admRender()}}
+function addCat(){CFG.menu.push({cat:"Nova categoria",itens:[]});admRender()}
+function delCat(c){if(confirm("Excluir a categoria e todos os itens dela?")){CFG.menu.splice(c,1);admRender()}}
+async function baixar(){
+  var ns=$("nsenha").value;
+  if(ns){if(ns.length<6){alert("Use uma senha com pelo menos 6 caracteres.");return}CFG.hash=await sha(ns)}
+  var json=JSON.stringify(CFG).replace(/</g,"\\u003c");
+  try{
+    var r=await fetch(location.href.split("#")[0],{cache:"no-store"});
+    if(!r.ok)throw 0;
+    var src=await r.text();
+    var out=src.replace(/(<script id="cfg" type="application\/json">)[\s\S]*?(<\/script>)/,function(_,a,b){return a+json+b});
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([out],{type:"text/html"}));
+    a.download="index.html";document.body.appendChild(a);a.click();a.remove();
+    renderMenu();
+  }catch(e){
+    prompt("Não consegui gerar o arquivo automaticamente. Copie este texto e envie para o suporte:",json);
+  }
+}
+renderMenu();
+if(location.hash==="#admin")openAdm();
+</script>
+</body>
+</html>
